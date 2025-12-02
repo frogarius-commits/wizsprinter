@@ -10,6 +10,10 @@ class TargetType(Enum):
     type_named = auto()
     type_spell = auto()
     type_select = auto()
+    type_minions = auto()
+    type_bosses = auto()
+    type_enemies = auto()
+    type_allies = auto()
 
 
 class SpellType(Enum):

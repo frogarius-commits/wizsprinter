@@ -27,7 +27,7 @@ def get_sprinty_grammar():
             second_enchant: _open_bracket (any_spell | words | string) _close_bracket
             
             target: (target_type | target_select)
-            target_type: target_self | target_boss | target_enemy | target_ally | target_aoe | target_spell | target_named
+            target_type: target_self | target_bosses | target_enemy | target_ally | target_aoe | target_minions | target_boss | target_enemies | target_allies | target_spell | target_named
             target_self: _spaced{"self"}
             target_boss: _spaced{"boss"}
             target_enemy: _spaced{"enemy"} (_open_paren INT _close_paren)?
@@ -36,6 +36,11 @@ def get_sprinty_grammar():
             target_named: words | string
             target_spell: _spaced{"spell"} _open_paren (any_spell | words | string) [(_comma (any_spell | words | string))*]? _close_paren
             target_select: _spaced{"select"} _open_paren target_type [(_comma target_type)*]? _close_paren | target_type [(_comma target_type)*]?
+            target_minions: _spaced{"minions"}
+            target_bosses: _spaced{"bosses"}
+            target_enemies: _spaced{"enemies"}
+            target_allies: _spaced{"allies"}
+            
             
             round_specifier: _newlines? "{" expression "}" _newlines?
             
@@ -227,6 +232,18 @@ class TreeToConfig(Transformer):
 
     def target_select(self, items):
         return TargetType.type_select, items
+    
+    def target_minions(self, _):
+        return TargetType.type_minions
+    
+    def target_enemies(self, _):
+        return TargetType.type_enemies
+    
+    def target_allies(self, _):
+        return TargetType.type_allies
+    
+    def target_bosses(self, _):
+        return TargetType.type_bosses
 
     def any_spell(self, items):
         return items

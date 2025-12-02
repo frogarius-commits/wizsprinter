@@ -691,6 +691,27 @@ class SprintyCombat(CombatHandler):
                         #else:
                         members.append(res)
             return members if members else False
+        elif ttype is TargetType.type_minions:
+            enemies = await self.get_enemies()
+            targets = []
+            for e in enemies:
+                if not await e.is_boss():
+                    targets.append(e)
+            return targets if targets else False
+        elif ttype is TargetType.type_bosses:
+            enemies = await self.get_enemies()
+            targets = []
+            for e in enemies:
+                if await e.is_boss():
+                    targets.append(e)
+            return targets if targets else False
+        elif ttype is TargetType.type_enemies:
+            enemies = await self.get_enemies()
+            return enemies if enemies else False
+        elif ttype is TargetType.type_allies:
+            allies = await self.get_allies()
+            allies.append(await self.get_client_member())
+            return allies if allies else False
 
         return False
 
